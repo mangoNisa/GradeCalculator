@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.nisanabi.myapplication.GpaActivity">
+    <item
+        android:id="@+id/action_add_module"
+        android:title="@string/action_add_module"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_calculate_gpa"
+        android:title="@string/action_calculate_gpa"
+        app:showAsAction="always"/>
+
+</menu>
