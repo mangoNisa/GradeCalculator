@@ -14,7 +14,7 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Add"
-        android:onClick="add_grade"
+        android:textColor="@color/value_color"
         android:id="@+id/text_grade" />
 
     <TextView
@@ -24,7 +24,7 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Add"
-        android:id="@+id/text_credit"
-        android:onClick="add_credit"/>
+        android:textColor="@color/value_color"
+        android:id="@+id/text_credit"/>
 
 </LinearLayout>

@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:textColor="@color/heading_color"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Grade"
             />
@@ -26,6 +27,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:textColor="@color/heading_color"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Credits"
             />
