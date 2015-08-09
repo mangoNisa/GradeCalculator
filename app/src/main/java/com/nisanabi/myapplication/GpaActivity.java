@@ -23,7 +23,6 @@ public class GpaActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpa);
     }
-
     public int findGPA(HashMap<Integer, ArrayList<Integer>> grade){
         int totalPoints = 0 ;
         int totalCredit = findTotalCredit(grade);
@@ -36,6 +35,13 @@ public class GpaActivity extends ActionBarActivity {
         return totalPoints/totalCredit;
     }
 
+    /**
+     * Calculates the total points awarded by multiplying the credits by
+     * each grade
+     * @param grade list of grades with the same number of credits awarded
+     * @param credit amount of credits awarded
+     * @return the total number of points awarded
+     */
     public int totalPoints(ArrayList<Integer> grade, int credit){
         int points = 0;
         int totalPoints = 0;
@@ -48,9 +54,9 @@ public class GpaActivity extends ActionBarActivity {
         return totalPoints;
     }
     /**
-     * findTotalCredit calculates the total number of credits stored in the map
-     * @param grade
-     * @return
+     * Calculates the total number of credits stored in the map
+     * @param grade the map that contains all the grades and credits
+     * @return total number of credits awarded
      */
     public int findTotalCredit(HashMap<Integer, ArrayList<Integer>> grade){
         int totalCredit = 0;
@@ -64,11 +70,10 @@ public class GpaActivity extends ActionBarActivity {
         return totalCredit;
     }
 
+    /**
+     * Adds a GpaActivityFragment to the activity. Allows user add another grade and credit
+     */
     public void addModule(){
-        //if(modules.isEmpty()/* || modules.get(lastModuleID).getGradeBox().getText() != "Add"
-               // || modules.get(lastModuleID).getCreditBox().getText() != "Add"*/) {
-
-
 
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -80,6 +85,8 @@ public class GpaActivity extends ActionBarActivity {
             modules.add(fragGpa);
     }
 
+
+
     public void displayAlert(String alert){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert")
@@ -89,14 +96,19 @@ public class GpaActivity extends ActionBarActivity {
                 .show();
     }
 
-
+    /**
+     * Calculates the GPA.
+     */
     private void calcGPA() {
-        int i = 0;
+       int i = 0;
+
+        /*
+           Find all the modules that have data filled for both grade and credit
+         */
         for(GpaActivityFragment frag : modules){
             if(frag.check()) {
                 //displayAlert("Missing some data in " + frag.check());
-                //break;
-                System.out.println("FRAG no: " + i + "  Frag : " + frag);
+                //break
                 frag.submit(i,frag.getGrade(),frag.getCredit());
                 i++;
 

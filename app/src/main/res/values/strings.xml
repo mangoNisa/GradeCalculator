@@ -7,6 +7,7 @@
     <string name="action_add_module">+</string>
     <string name="action_calculate_gpa">=</string>
     <string name ="title_grade">Grade</string>
+    <string name ="title_credit">Credit</string>
     <string name="title_activity_select_module">Select Module</string>
 
 </resources>

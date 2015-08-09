@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-
+import android.widget.Toast;
 
 
 public class GpaActivityFragment extends Fragment {
@@ -64,7 +63,13 @@ public class GpaActivityFragment extends Fragment {
                 builder.setView(input)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                String value = input.getText().toString();
+                                String value;
+                                if (input.getText().toString().equals("")) {
+                                    value = "0";
+                                    Toast.makeText(getActivity(),"Credit set as 0", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    value = input.getText().toString();
+                                }
                                 add_credit.setText(value);
                                 credit = Integer.parseInt(value);
                             }
@@ -84,11 +89,13 @@ public class GpaActivityFragment extends Fragment {
     public int getCredit(){
         return this.credit;
     }
+
+    /**
+     * Checks if the credit and grade text boxes have values
+     * @return true if textboxes contain data
+     */
     public boolean check(){
-        if(add_credit.getText().toString().equals("Add")|| add_grade.getText().toString().equals("Add")){
-            return false;
-        }
-        return true;
+        return !(add_credit.getText().toString().equals("Add")|| add_grade.getText().toString().equals("Add"));
     }
 
     public void submit(int i, int a, int b){

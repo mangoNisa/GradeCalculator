@@ -19,8 +19,7 @@
             android:gravity="center"
             android:textColor="@color/heading_color"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Grade"
-            />
+            android:text="@string/title_grade"/>
 
         <TextView
             android:layout_width="0px"
@@ -29,14 +28,12 @@
             android:gravity="center"
             android:textColor="@color/heading_color"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Credits"
+            android:text="@string/title_credit"
             />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="500dp">
+
     <ScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -52,6 +49,6 @@
         </LinearLayout>
 
     </ScrollView>
-        </LinearLayout>
+
 
 </LinearLayout>
