@@ -1,4 +1,4 @@
-package com.nisanabi.myapplication;
+package com.nisanabi.gpacalculator;
 
 import java.util.HashMap;
 import java.util.Map;

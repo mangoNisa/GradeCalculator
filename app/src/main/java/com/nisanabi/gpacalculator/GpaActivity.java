@@ -1,4 +1,4 @@
-package com.nisanabi.myapplication;
+package com.nisanabi.gpacalculator;
 
 
 import android.app.AlertDialog;
@@ -129,8 +129,7 @@ public class GpaActivity extends ActionBarActivity {
 
             int grade = data.get("Grade");
             int credit = data.get("Credit");
-            System.out.println("bla credit: " + totalcredit + "+" + credit + " keyyyy : " + k);
-            System.out.println("bla points:" + grade + " x " + credit + " = " + grade*credit);
+
 
             int points = grade*credit;
 
@@ -138,14 +137,11 @@ public class GpaActivity extends ActionBarActivity {
             gradepoints += points;
         }
 
-        System.out.println("total points:" + gradepoints);
-        System.out.println("total credit:" + totalcredit);
-        System.out.println("gpa:" + gradepoints/totalcredit);
-
-
         gpa = gradepoints/totalcredit;
         String answer = new DecimalFormat("##.##").format(gpa);
-        displayAlert("Your GPA is: " + answer);
+        //find the grade assiated with the points awarded
+        ConvertGradePoint pointsToGrade= new ConvertGradePoint((int) Math.round(Double.parseDouble(answer)));
+        displayAlert("Your GPA is: " + answer + "\n" + "Grade: " + pointsToGrade.getgradeConverted());
     }
 
     @Override

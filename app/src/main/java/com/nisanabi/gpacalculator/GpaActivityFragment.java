@@ -1,4 +1,4 @@
-package com.nisanabi.myapplication;
+package com.nisanabi.gpacalculator;
 
 
 import android.app.AlertDialog;
@@ -9,7 +9,6 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,8 +41,8 @@ public class GpaActivityFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 String grade = getResources().getStringArray(R.array.list_grade)[which]+"";
                                 add_grade.setText(grade);
-                                GradetoPoints points = new GradetoPoints(grade);
-                                gradepoint = points.getPoints();
+                                ConvertGradePoint points = new ConvertGradePoint(grade);
+                                gradepoint = points.getpointsConverted();
                             }
                         });
                 builder.create();
