@@ -4,15 +4,20 @@ package com.nisanabi.gpacalculator;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class GpaActivity extends ActionBarActivity {
 
@@ -143,6 +148,25 @@ public class GpaActivity extends ActionBarActivity {
         ConvertGradePoint pointsToGrade= new ConvertGradePoint((int) Math.round(Double.parseDouble(answer)));
         displayAlert("Your GPA is: " + answer + "\n" + "Grade: " + pointsToGrade.getgradeConverted());
     }
+
+    public void saveData(View view){
+
+        SharedPreferences sharedPref = getSharedPreferences("gpaData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        //saves each item in grademap to the editor
+        GradeMapSingleton grademap = GradeMapSingleton.getInstance();
+        for(Object key: grademap.getGradeMap().keySet()){
+            int k = (int) key;
+            HashMap<String, Integer> data = (HashMap) grademap.getGradeMap().get(k);
+            editor.putString(key.toString(), data.get("Grade") + "," + data.get("Credit"));
+        }
+        editor.apply();
+
+        Toast.makeText(this, "Huzzah! Saved", Toast.LENGTH_LONG).show();
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

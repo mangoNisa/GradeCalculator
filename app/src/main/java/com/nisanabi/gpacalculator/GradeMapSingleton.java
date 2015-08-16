@@ -25,7 +25,6 @@ public class GradeMapSingleton {
 
     public void add(int i, int grade, int credit){
         HashMap<String,Integer> currentgrade = new HashMap<String, Integer>();
-        System.out.println("SINGLEEEEETON: " + grade + " " + credit);
         currentgrade.put("Grade", grade);
         currentgrade.put("Credit",credit);
         grademap.put(i, currentgrade);
