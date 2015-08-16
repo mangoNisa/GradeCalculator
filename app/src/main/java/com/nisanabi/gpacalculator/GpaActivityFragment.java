@@ -89,6 +89,13 @@ public class GpaActivityFragment extends Fragment {
         return this.credit;
     }
 
+    public void setGrade(int grade){
+        add_grade.setText(grade);
+    }
+
+    public void setCredit(int credit){
+        add_credit.setText(credit);
+    }
     /**
      * Checks if the credit and grade text boxes have values
      * @return true if textboxes contain data

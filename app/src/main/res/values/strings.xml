@@ -4,8 +4,8 @@
     <string name="title_activity_gpa">GPA Calculator</string>
     <string name="select_grade">Select Grade</string>
     <string name="select_credit">Select Credit</string>
-    <string name="action_add_module">+</string>
-    <string name="action_calculate_gpa">=</string>
+    <string name="action_add_module">Add</string>
+    <string name="action_calculate_gpa">Calculate</string>
     <string name ="title_grade">Grade</string>
     <string name ="title_credit">Credit</string>
     <string name="title_activity_select_module">Select Module</string>

@@ -5,11 +5,23 @@
     <item
         android:id="@+id/action_add_module"
         android:title="@string/action_add_module"
+        android:icon="@mipmap/add"
         android:orderInCategory="100"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_calculate_gpa"
         android:title="@string/action_calculate_gpa"
-        app:showAsAction="always"/>
+        android:icon="@mipmap/check"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_save_data"
+        android:title="Save"
+        android:icon="@mipmap/check"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_clear_data"
+        android:title="Clear"
+        android:icon="@mipmap/clear"
+        app:showAsAction="never"/>
 
 </menu>

@@ -1,13 +1,13 @@
 package com.nisanabi.gpacalculator;
 
-
 import android.app.AlertDialog;
+import android.support.v4.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,17 +17,25 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-public class GpaActivity extends ActionBarActivity {
+public class GpaActivity extends AppCompatActivity {
 
     ArrayList<GpaActivityFragment> modules = new ArrayList<GpaActivityFragment>();
-
+    GpaActivityFragment fragGpa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpa);
+
+        try{
+            displayData(getCurrentFocus());
+        }catch(Exception e){
+
+        }
     }
+
     public int findGPA(HashMap<Integer, ArrayList<Integer>> grade){
         int totalPoints = 0 ;
         int totalCredit = findTotalCredit(grade);
@@ -126,7 +134,7 @@ public class GpaActivity extends ActionBarActivity {
 
         double gradepoints = 0;
         double totalcredit = 0;
-        double gpa = 0;
+        double gpa;
 
         for(Object key : grademap.getGradeMap().keySet()){
             int k = (Integer) key;
@@ -166,7 +174,34 @@ public class GpaActivity extends ActionBarActivity {
         Toast.makeText(this, "Huzzah! Saved", Toast.LENGTH_LONG).show();
     }
 
+    public void displayData(View view){
 
+        SharedPreferences sharedPref = getSharedPreferences("gpaData", Context.MODE_PRIVATE);
+        Map<String, Object> grademap =(Map) sharedPref.getAll();
+        //create the modules to add the data to
+        for(int i = 0; i<grademap.size(); i++) addModule();
+        int i = 0;
+        for(String key: grademap.keySet()){
+            String[] gradecredit = getGradeCredit(grademap.get(key).toString());
+            int grade = Integer.parseInt(gradecredit[0]);
+            int credit = Integer.parseInt(gradecredit[1]);
+
+            GpaActivityFragment frag = modules.get(i);
+            frag.setGrade(grade);
+            frag.setCredit(credit);
+
+            i++;
+        }
+    }
+    /**
+     * Find the grade and credit couple
+     * @param a Grade and credits values separated with a comma
+     * @return An array with the grade at index 0 and credit at index 0
+     */
+    public String[] getGradeCredit(String a){
+        String[] array = a.split(",");
+        return array;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
