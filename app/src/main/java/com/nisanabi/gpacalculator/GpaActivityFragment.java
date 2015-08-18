@@ -18,13 +18,14 @@ public class GpaActivityFragment extends Fragment {
 
     TextView add_grade, add_credit;
     int gradepoint, credit;
+    View  view;
     GradeMapSingleton grademap;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_gpa, container, false);
-
+        view = inflater.inflate(R.layout.fragment_gpa, container, false);
+        System.out.println(view.toString()+"doing it oncreateview");
         grademap = GradeMapSingleton.getInstance();
 
         add_grade = (TextView) view.findViewById(R.id.text_grade);
@@ -40,9 +41,10 @@ public class GpaActivityFragment extends Fragment {
                         .setItems(grade_list, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 String grade = getResources().getStringArray(R.array.list_grade)[which]+"";
-                                add_grade.setText(grade);
+                                setGrade(grade);
+                                /*add_grade.setText(grade);
                                 ConvertGradePoint points = new ConvertGradePoint(grade);
-                                gradepoint = points.getpointsConverted();
+                                gradepoint = points.getpointsConverted();*/
                             }
                         });
                 builder.create();
@@ -52,7 +54,7 @@ public class GpaActivityFragment extends Fragment {
 
         add_credit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                final int grade_list = R.array.list_grade;
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Credits")
                         .setMessage("How many credits were you awarded?");
@@ -69,9 +71,9 @@ public class GpaActivityFragment extends Fragment {
                                 } else {
                                     value = input.getText().toString();
                                 }
-                                add_credit.setText(value);
-                                credit = Integer.parseInt(value);
-                            }
+                                setCredit(value);
+                                /*add_credit.setText(value);
+                                credit = Integer.parseInt(value);*/                            }
                         });
                 builder.create();
                 builder.show();
@@ -89,13 +91,27 @@ public class GpaActivityFragment extends Fragment {
         return this.credit;
     }
 
-    public void setGrade(int grade){
+    public void setGrade(String grade){
+
+        ConvertGradePoint points = new ConvertGradePoint(grade);
+        add_grade = (TextView) view.findViewById(R.id.text_grade);
         add_grade.setText(grade);
+        System.out.println("blo??????????");
+
+        this.gradepoint = points.getpointsConverted();
+        System.out.println("BLAYYYYYYYYYYYYYYYYYYYYY");
+
+
     }
 
-    public void setCredit(int credit){
+    public void setCredit(String credit){
+        add_credit = (TextView) view.findViewById(R.id.text_credit);
         add_credit.setText(credit);
+        this.credit = Integer.parseInt(credit);
+
     }
+
+
     /**
      * Checks if the credit and grade text boxes have values
      * @return true if textboxes contain data

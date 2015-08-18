@@ -1,7 +1,7 @@
 package com.nisanabi.gpacalculator;
 
 import android.app.AlertDialog;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -11,29 +11,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public class GpaActivity extends AppCompatActivity {
 
-    ArrayList<GpaActivityFragment> modules = new ArrayList<GpaActivityFragment>();
-    GpaActivityFragment fragGpa;
+    ArrayList<GpaActivityFragment> modules = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpa);
 
-        try{
-            displayData(getCurrentFocus());
-        }catch(Exception e){
-
-        }
+        //try{
+         //   displayData(getCurrentFocus());
+        //}catch(Exception e){
+         //   Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+        //}
     }
 
     public int findGPA(HashMap<Integer, ArrayList<Integer>> grade){
@@ -92,7 +91,7 @@ public class GpaActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             GpaActivityFragment fragGpa = new GpaActivityFragment();
-            fragmentTransaction.add(R.id.gpa_fragment_container, fragGpa, "");
+            fragmentTransaction.add(R.id.gpa_fragment_container, fragGpa, modules.size()+"");
             fragmentTransaction.commit();
 
             modules.add(fragGpa);
@@ -102,24 +101,21 @@ public class GpaActivity extends AppCompatActivity {
 
     public void displayAlert(String alert){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Alert")
+        builder.setTitle("GPA Result")
                 .setMessage(alert)
                 .setNeutralButton("ok", null)
                 .create()
                 .show();
     }
 
-    /**
-     * Calculates the GPA.
-     */
-    private void calcGPA() {
-       int i = 0;
+    private void storeModules(){
+        int i = 0;
 
-        /*
-           Find all the modules that have data filled for both grade and credit
-         */
+        // Find all the modules that have data filled for both grade and credit
+
         for(GpaActivityFragment frag : modules){
             if(frag.check()) {
+
                 //displayAlert("Missing some data in " + frag.check());
                 //break
                 frag.submit(i,frag.getGrade(),frag.getCredit());
@@ -127,10 +123,16 @@ public class GpaActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+    /**
+     * Calculates the GPA.
+     */
+    private void calcGPA() {
+
+        storeModules();
 
         GradeMapSingleton grademap = GradeMapSingleton.getInstance();
-
-        Iterator entries = grademap.getGradeMap().entrySet().iterator();
 
         double gradepoints = 0;
         double totalcredit = 0;
@@ -158,6 +160,7 @@ public class GpaActivity extends AppCompatActivity {
     }
 
     public void saveData(View view){
+        storeModules();
 
         SharedPreferences sharedPref = getSharedPreferences("gpaData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -178,18 +181,40 @@ public class GpaActivity extends AppCompatActivity {
 
         SharedPreferences sharedPref = getSharedPreferences("gpaData", Context.MODE_PRIVATE);
         Map<String, Object> grademap =(Map) sharedPref.getAll();
+
         //create the modules to add the data to
-        for(int i = 0; i<grademap.size(); i++) addModule();
-        int i = 0;
+       // for(int i = 0; i<grademap.size(); i++)addModule();
+
+        int i = 1;
+
         for(String key: grademap.keySet()){
-            String[] gradecredit = getGradeCredit(grademap.get(key).toString());
-            int grade = Integer.parseInt(gradecredit[0]);
-            int credit = Integer.parseInt(gradecredit[1]);
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            GpaActivityFragment frag = modules.get(i);
-            frag.setGrade(grade);
-            frag.setCredit(credit);
+            GpaActivityFragment fragGpa = new GpaActivityFragment();
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
+            System.out.println(grademap.get(key).toString().split(",")[0]);
+
+            String grade =  grademap.get(key).toString().split(",")[0];
+            String credit = grademap.get(key).toString().split(",")[1];
+            System.out.println(" im here");
+
+            fragGpa.setGrade(grade);
+            fragGpa.setCredit(credit);
+            fragmentTransaction.add(R.id.gpa_fragment_container, fragGpa, modules.size() + "");
+
+            fragmentTransaction.commit();
+
+            /*View v = frag.getView();
+            System.out.println("Im here nowwwww");
+            TextView c = (TextView) v.findViewById(R.id.text_credit);
+            System.out.println("BLAAAA");
+            c.setText(credit);
+            System.out.println("BLOOOOOOOO");
+            TextView g = (TextView) v.findViewById(R.id.text_grade);
+            g.setText(grade);*/
+            modules.add(fragGpa);
             i++;
         }
     }
@@ -199,8 +224,14 @@ public class GpaActivity extends AppCompatActivity {
      * @return An array with the grade at index 0 and credit at index 0
      */
     public String[] getGradeCredit(String a){
-        String[] array = a.split(",");
-        return array;
+        return a.split(",");
+    }
+
+    public void clearData(){
+        SharedPreferences sharedPref = getSharedPreferences("gpaData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
+        editor.commit();
     }
 
     @Override
@@ -225,6 +256,13 @@ public class GpaActivity extends AppCompatActivity {
             case R.id.action_calculate_gpa:
                 calcGPA();
                 break;
+           /* case R.id.action_save_data:
+                saveData(getCurrentFocus());
+                break;
+            case R.id.action_clear_data:
+                clearData();
+                break;*/
+
         }
 
         return super.onOptionsItemSelected(item);
