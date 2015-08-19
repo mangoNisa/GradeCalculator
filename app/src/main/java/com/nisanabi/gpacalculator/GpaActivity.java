@@ -1,18 +1,21 @@
 package com.nisanabi.gpacalculator;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
+
+
+import com.purplebrain.adbuddiz.sdk.AdBuddiz;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -27,6 +30,8 @@ public class GpaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpa);
+        AdBuddiz.setPublisherKey("9dfbf393-97a9-4ee8-a2fe-904d48c81cba");
+        AdBuddiz.cacheAds(this);
 
         //try{
          //   displayData(getCurrentFocus());
@@ -103,7 +108,11 @@ public class GpaActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("GPA Result")
                 .setMessage(alert)
-                .setNeutralButton("ok", null)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        AdBuddiz.showAd(GpaActivity.this);
+                    }
+                })
                 .create()
                 .show();
     }
