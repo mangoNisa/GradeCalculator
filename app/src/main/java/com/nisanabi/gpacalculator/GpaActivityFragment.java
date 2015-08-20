@@ -9,7 +9,6 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -92,7 +91,12 @@ public class GpaActivityFragment extends Fragment {
 
         btn_remove.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                grademap.remove(getGrade(),getCredit());
+
+                System.out.println(grademap.toString());
+                grademap.remove(getGrade(), getCredit());
+
+                System.out.println(grademap.toString());
+
                 getActivity().getFragmentManager().beginTransaction().remove(GpaActivityFragment.this).commit();
             }
         });

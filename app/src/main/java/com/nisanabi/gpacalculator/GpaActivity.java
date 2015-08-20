@@ -1,7 +1,6 @@
 package com.nisanabi.gpacalculator;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -82,7 +81,8 @@ public class GpaActivity extends AppCompatActivity {
 
                 //displayAlert("Missing some data in " + frag.check());
                 //break
-                frag.submit(i,frag.getGrade(),frag.getCredit());
+                System.out.println(frag.getGrade() + " " + frag.getCredit());
+                frag.submit(i, frag.getGrade(), frag.getCredit());
                 i++;
 
             }
@@ -102,12 +102,10 @@ public class GpaActivity extends AppCompatActivity {
         double totalcredit = 0;
         double gpa;
 
-        for(Object key : grademap.getGradeMap().keySet()){
-            int k = (Integer) key;
-            HashMap<String, Integer> data = (HashMap) grademap.getGradeMap().get(k) ;
+        for(HashMap<String, Integer> item: grademap.getGradeMap()){
 
-            int grade = data.get("Grade");
-            int credit = data.get("Credit");
+            int grade = item.get("Grade");
+            int credit = item.get("Credit");
 
             System.out.println(grade+" "+credit);
             int points = grade*credit;
@@ -131,10 +129,9 @@ public class GpaActivity extends AppCompatActivity {
 
         //saves each item in grademap to the editor
         GradeMapSingleton grademap = GradeMapSingleton.getInstance();
-        for(Object key: grademap.getGradeMap().keySet()){
-            int k = (int) key;
-            HashMap<String, Integer> data = (HashMap) grademap.getGradeMap().get(k);
-            editor.putString(key.toString(), data.get("Grade") + "," + data.get("Credit"));
+        for(HashMap<String, Integer> item: grademap.getGradeMap()){
+
+            editor.putString(item.toString(), item.get("Grade") + "," + item.get("Credit"));
         }
         editor.apply();
 
