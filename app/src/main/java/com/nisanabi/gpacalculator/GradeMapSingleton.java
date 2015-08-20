@@ -36,11 +36,12 @@ public class GradeMapSingleton {
 
     public void remove(int gradepoint, int credit) {
         System.out.println(grademap.size());
-
-
-
-
-
+        for(HashMap<String,Integer> item : grademap){
+            System.out.print("Removing " + item.toString());
+            if(item.get("Grade").equals(gradepoint) && item.get("Credit").equals(credit)){
+                grademap.remove(item);
+            }
+        }
     }
     public static GradeMapSingleton getInstance(){
 

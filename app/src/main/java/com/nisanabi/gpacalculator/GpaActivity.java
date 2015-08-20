@@ -40,6 +40,44 @@ public class GpaActivity extends AppCompatActivity {
          //  Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
         //}
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        storeModules();
+    }
+
+    /**
+     * Calculates the GPA.
+     */
+    private void calcGPA() {
+
+        storeModules();
+
+        GradeMapSingleton grademap = GradeMapSingleton.getInstance();
+
+        double gradepoints = 0;
+        double totalcredit = 0;
+        double gpa;
+
+        for(HashMap<String, Integer> item: grademap.getGradeMap()){
+
+            int grade = item.get("Grade");
+            int credit = item.get("Credit");
+
+            int points = grade*credit;
+
+            totalcredit += credit;
+            gradepoints += points;
+        }
+
+        gpa = gradepoints/totalcredit;
+        String answer = new DecimalFormat("##.##").format(gpa);
+        //find the grade assiated with the points awarded
+        ConvertGradePoint pointsToGrade= new ConvertGradePoint((int) Math.round(Double.parseDouble(answer)));
+        displayAlert("Your GPA is: " + answer + "\n" + "Grade: " + pointsToGrade.getgradeConverted());
+    }
+
     /**
      * Adds a GpaActivityFragment to the activity. Allows user add another grade and credit
      */
@@ -74,50 +112,14 @@ public class GpaActivity extends AppCompatActivity {
         int i = 0;
 
         // Find all the modules that have data filled for both grade and credit
-
         for(GpaActivityFragment frag : modules){
             if(frag.check()) {
-
                 //displayAlert("Missing some data in " + frag.check());
                 //break
-                System.out.println(frag.getGrade() + " " + frag.getCredit());
                 frag.submit(i, frag.getGrade(), frag.getCredit());
                 i++;
-
             }
         }
-    }
-
-    /**
-     * Calculates the GPA.
-     */
-    private void calcGPA() {
-
-        storeModules();
-
-        GradeMapSingleton grademap = GradeMapSingleton.getInstance();
-
-        double gradepoints = 0;
-        double totalcredit = 0;
-        double gpa;
-
-        for(HashMap<String, Integer> item: grademap.getGradeMap()){
-
-            int grade = item.get("Grade");
-            int credit = item.get("Credit");
-
-            System.out.println(grade+" "+credit);
-            int points = grade*credit;
-
-            totalcredit += credit;
-            gradepoints += points;
-        }
-
-        gpa = gradepoints/totalcredit;
-        String answer = new DecimalFormat("##.##").format(gpa);
-        //find the grade assiated with the points awarded
-        ConvertGradePoint pointsToGrade= new ConvertGradePoint((int) Math.round(Double.parseDouble(answer)));
-        displayAlert("Your GPA is: " + answer + "\n" + "Grade: " + pointsToGrade.getgradeConverted());
     }
 
     public void saveData(View view){
@@ -151,21 +153,12 @@ public class GpaActivity extends AppCompatActivity {
                 GpaActivityFragment frag = modules.get(i);
                 String grade = grademap.get(key).toString().split(",")[0];
                 String credit = grademap.get(key).toString().split(",")[1];
-                System.out.println(" im here");
 
                 frag.setPrefGrade(grade);
                 frag.setPrefCredit(credit);
                 i++;
             }
         }
-    }
-    /**
-     * Find the grade and credit couple
-     * @param a Grade and credits values separated with a comma
-     * @return An array with the grade at index 0 and credit at index 0
-     */
-    public String[] getGradeCredit(String a){
-        return a.split(",");
     }
 
     @Override

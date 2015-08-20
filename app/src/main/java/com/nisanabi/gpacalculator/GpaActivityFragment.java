@@ -1,10 +1,7 @@
 package com.nisanabi.gpacalculator;
 
-
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.InputType;
@@ -16,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -27,14 +25,13 @@ public class GpaActivityFragment extends Fragment {
     String prefCredit = "";
     GradeMapSingleton grademap;
     ImageButton btn_remove;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        System.out.println("worksssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_gpa, container, false);
-        System.out.println(view.toString()+"doing it oncreateview");
         grademap = GradeMapSingleton.getInstance();
 
         add_grade = (TextView) view.findViewById(R.id.text_grade);
@@ -95,7 +92,17 @@ public class GpaActivityFragment extends Fragment {
 
         btn_remove.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                GpaActivity gpa = new GpaActivity();
+                for(HashMap<String,Integer> item : grademap.getGradeMap()){
+                    System.out.print(item.toString());
+                }
+                System.out.println(" ");
+
+                grademap.remove(getGrade(),getCredit());
+                for(HashMap<String,Integer> item : grademap.getGradeMap()){
+                    System.out.print(item.toString());
+                }
+                System.out.println(" ");
+
                 getActivity().getFragmentManager().beginTransaction().remove(GpaActivityFragment.this).commit();
             }
         });
@@ -112,7 +119,6 @@ public class GpaActivityFragment extends Fragment {
     }
 
     public void setPrefGrade(String grade){
-        System.out.println(grade);
         int g = Integer.parseInt(grade);
         ConvertGradePoint pointsToGrade= new ConvertGradePoint(g);
         prefGrade = pointsToGrade.getgradeConverted();
