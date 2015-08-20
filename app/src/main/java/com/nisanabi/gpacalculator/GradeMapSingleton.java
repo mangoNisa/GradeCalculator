@@ -23,11 +23,20 @@ public class GradeMapSingleton {
     }
 
 
-    public void add(int i, int grade, int credit){
+    public void add(int i, int gradepoint, int credit){
         HashMap<String,Integer> currentgrade = new HashMap<String, Integer>();
-        currentgrade.put("Grade", grade);
+        currentgrade.put("Grade", gradepoint);
         currentgrade.put("Credit",credit);
         grademap.put(i, currentgrade);
+    }
+
+    public void remove(int gradepoint, int credit) {
+        for(Object key : grademap.keySet()) {
+            HashMap<String, Integer> removegrade = grademap.get(key);
+            if(removegrade.get("Grade").equals(gradepoint) && removegrade.get("Credit").equals(credit)){
+                grademap.remove(key);
+            }
+        }
     }
     public static GradeMapSingleton getInstance(){
 
@@ -36,4 +45,8 @@ public class GradeMapSingleton {
         }
         return instance;
     }
+
+
+
+
 }

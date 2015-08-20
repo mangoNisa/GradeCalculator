@@ -1,11 +1,11 @@
 package com.nisanabi.gpacalculator;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.View.OnClickListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +20,7 @@ import com.purplebrain.adbuddiz.sdk.AdBuddiz;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GpaActivity extends AppCompatActivity {
@@ -30,63 +31,17 @@ public class GpaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpa);
+
+        //for ad
         AdBuddiz.setPublisherKey("9dfbf393-97a9-4ee8-a2fe-904d48c81cba");
         AdBuddiz.cacheAds(this);
 
-        //try{
-         //   displayData(getCurrentFocus());
+       // try{
+        displayData(getCurrentFocus());
         //}catch(Exception e){
-         //   Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+         //  Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
         //}
     }
-
-    public int findGPA(HashMap<Integer, ArrayList<Integer>> grade){
-        int totalPoints = 0 ;
-        int totalCredit = findTotalCredit(grade);
-
-        for(HashMap.Entry<Integer, ArrayList<Integer>> entry: grade.entrySet()){
-            int points = totalPoints(entry.getValue(), entry.getKey());
-            totalPoints += points;
-        }
-
-        return totalPoints/totalCredit;
-    }
-
-    /**
-     * Calculates the total points awarded by multiplying the credits by
-     * each grade
-     * @param grade list of grades with the same number of credits awarded
-     * @param credit amount of credits awarded
-     * @return the total number of points awarded
-     */
-    public int totalPoints(ArrayList<Integer> grade, int credit){
-        int points = 0;
-        int totalPoints = 0;
-
-        for(Integer g: grade){
-            points += g*credit;
-            totalPoints += points;
-        }
-
-        return totalPoints;
-    }
-    /**
-     * Calculates the total number of credits stored in the map
-     * @param grade the map that contains all the grades and credits
-     * @return total number of credits awarded
-     */
-    public int findTotalCredit(HashMap<Integer, ArrayList<Integer>> grade){
-        int totalCredit = 0;
-
-        //calculate number of grades with key num of credits and add to total credits
-        for(HashMap.Entry<Integer, ArrayList<Integer>> entry: grade.entrySet()){
-            int credit = entry.getKey()*entry.getValue().size();
-            totalCredit += credit;
-        }
-
-        return totalCredit;
-    }
-
     /**
      * Adds a GpaActivityFragment to the activity. Allows user add another grade and credit
      */
@@ -154,7 +109,7 @@ public class GpaActivity extends AppCompatActivity {
             int grade = data.get("Grade");
             int credit = data.get("Credit");
 
-
+            System.out.println(grade+" "+credit);
             int points = grade*credit;
 
             totalcredit += credit;
@@ -192,39 +147,20 @@ public class GpaActivity extends AppCompatActivity {
         Map<String, Object> grademap =(Map) sharedPref.getAll();
 
         //create the modules to add the data to
-       // for(int i = 0; i<grademap.size(); i++)addModule();
+        for(int i = 0; i<grademap.size(); i++)addModule();
 
-        int i = 1;
+        int i = 0;
+        if(grademap.size()>0) {
+            for (String key : grademap.keySet()) {
+                GpaActivityFragment frag = modules.get(i);
+                String grade = grademap.get(key).toString().split(",")[0];
+                String credit = grademap.get(key).toString().split(",")[1];
+                System.out.println(" im here");
 
-        for(String key: grademap.keySet()){
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            GpaActivityFragment fragGpa = new GpaActivityFragment();
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-            System.out.println(grademap.get(key).toString().split(",")[0]);
-
-            String grade =  grademap.get(key).toString().split(",")[0];
-            String credit = grademap.get(key).toString().split(",")[1];
-            System.out.println(" im here");
-
-            fragGpa.setGrade(grade);
-            fragGpa.setCredit(credit);
-            fragmentTransaction.add(R.id.gpa_fragment_container, fragGpa, modules.size() + "");
-
-            fragmentTransaction.commit();
-
-            /*View v = frag.getView();
-            System.out.println("Im here nowwwww");
-            TextView c = (TextView) v.findViewById(R.id.text_credit);
-            System.out.println("BLAAAA");
-            c.setText(credit);
-            System.out.println("BLOOOOOOOO");
-            TextView g = (TextView) v.findViewById(R.id.text_grade);
-            g.setText(grade);*/
-            modules.add(fragGpa);
-            i++;
+                frag.setPrefGrade(grade);
+                frag.setPrefCredit(credit);
+                i++;
+            }
         }
     }
     /**
@@ -234,13 +170,6 @@ public class GpaActivity extends AppCompatActivity {
      */
     public String[] getGradeCredit(String a){
         return a.split(",");
-    }
-
-    public void clearData(){
-        SharedPreferences sharedPref = getSharedPreferences("gpaData", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.clear();
-        editor.commit();
     }
 
     @Override
@@ -265,13 +194,9 @@ public class GpaActivity extends AppCompatActivity {
             case R.id.action_calculate_gpa:
                 calcGPA();
                 break;
-           /* case R.id.action_save_data:
+            case R.id.action_save_data:
                 saveData(getCurrentFocus());
                 break;
-            case R.id.action_clear_data:
-                clearData();
-                break;*/
-
         }
 
         return super.onOptionsItemSelected(item);

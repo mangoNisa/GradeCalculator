@@ -13,16 +13,11 @@
         android:title="@string/action_calculate_gpa"
         android:icon="@mipmap/check"
         app:showAsAction="never"/>
-    <!---<item
+    <item
         android:id="@+id/action_save_data"
         android:title="Save"
         android:icon="@mipmap/check"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_clear_data"
-        android:title="Clear"
-        android:icon="@mipmap/clear"
-        app:sho wAsAction="never"/>
-        -->
+
 
 </menu>
