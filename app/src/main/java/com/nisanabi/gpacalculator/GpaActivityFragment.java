@@ -2,7 +2,9 @@ package com.nisanabi.gpacalculator;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.InputType;
@@ -13,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Map;
 
 
 public class GpaActivityFragment extends Fragment {
@@ -91,12 +95,7 @@ public class GpaActivityFragment extends Fragment {
 
         btn_remove.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
-                System.out.println(grademap.toString());
-                grademap.remove(getGrade(), getCredit());
-
-                System.out.println(grademap.toString());
-
+                GpaActivity gpa = new GpaActivity();
                 getActivity().getFragmentManager().beginTransaction().remove(GpaActivityFragment.this).commit();
             }
         });
