@@ -34,17 +34,18 @@ public class GpaActivity extends AppCompatActivity {
         AdBuddiz.setPublisherKey("9dfbf393-97a9-4ee8-a2fe-904d48c81cba");
         AdBuddiz.cacheAds(this);
 
-       // try{
         displayData(getCurrentFocus());
-        //}catch(Exception e){
-         //  Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-        //}
     }
 
     @Override
     public void onResume(){
         super.onResume();
         storeModules();
+    }
+
+    @Override
+    public void onPause(){
+        saveData(getCurrentFocus());
     }
 
     /**
@@ -182,9 +183,6 @@ public class GpaActivity extends AppCompatActivity {
                 break;
             case R.id.action_calculate_gpa:
                 calcGPA();
-                break;
-            case R.id.action_save_data:
-                saveData(getCurrentFocus());
                 break;
         }
 

@@ -13,11 +13,4 @@
         android:title="@string/action_calculate_gpa"
         android:icon="@mipmap/check"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_save_data"
-        android:title="Save"
-        android:icon="@mipmap/check"
-        app:showAsAction="never"/>
-
-
 </menu>

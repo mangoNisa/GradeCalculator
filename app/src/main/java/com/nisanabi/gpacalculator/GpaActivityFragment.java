@@ -1,7 +1,9 @@
 package com.nisanabi.gpacalculator;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.InputType;
@@ -92,17 +94,20 @@ public class GpaActivityFragment extends Fragment {
 
         btn_remove.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                for(HashMap<String,Integer> item : grademap.getGradeMap()){
-                    System.out.print(item.toString());
-                }
-                System.out.println(" ");
+                SharedPreferences sharedPref = GpaActivityFragment.this.getActivity().getSharedPreferences("gpaData", Context.MODE_PRIVATE);
+                Map<String, Object> prefMap =(Map) sharedPref.getAll();
 
-                grademap.remove(getGrade(),getCredit());
-                for(HashMap<String,Integer> item : grademap.getGradeMap()){
-                    System.out.print(item.toString());
-                }
-                System.out.println(" ");
+                for(String key : prefMap.keySet()){
+                    String grade = prefMap.get(key).toString().split(",")[0];
+                    String credit = prefMap.get(key).toString().split(",")[1];
 
+                    if(grade.equals(getGrade()+"") && credit.equals(getCredit()+"")){
+                        sharedPref.edit().remove(key).apply();
+                    }
+                }
+                grademap.remove(getGrade(), getCredit());
+
+                //remove the fragment from disply
                 getActivity().getFragmentManager().beginTransaction().remove(GpaActivityFragment.this).commit();
             }
         });
