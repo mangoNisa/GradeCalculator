@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import com.purplebrain.adbuddiz.sdk.AdBuddiz;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GpaActivity extends AppCompatActivity {
@@ -34,10 +36,14 @@ public class GpaActivity extends AppCompatActivity {
         AdBuddiz.setPublisherKey("9dfbf393-97a9-4ee8-a2fe-904d48c81cba");
         AdBuddiz.cacheAds(this);
 
-        displayData(getCurrentFocus());
+       // try{
+        //displayData(getCurrentFocus());
+        //}catch(Exception e){
+         //  Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+        //}
     }
 
-    @Override
+    /*@Override
     public void onResume(){
         super.onResume();
         storeModules();
@@ -45,8 +51,10 @@ public class GpaActivity extends AppCompatActivity {
 
     @Override
     public void onPause(){
+        super.onPause();
+        System.out.println(GradeMapSingleton.getInstance().getGradeMap().size() + " +++++");
         saveData(getCurrentFocus());
-    }
+    }*/
 
     /**
      * Calculates the GPA.
@@ -54,17 +62,16 @@ public class GpaActivity extends AppCompatActivity {
     private void calcGPA() {
 
         storeModules();
-
-        GradeMapSingleton grademap = GradeMapSingleton.getInstance();
+        //List<Fragment> allFragments = getFragmentManager().getFragments();
+        //GradeMapSingleton grademap = GradeMapSingleton.getInstance();
 
         double gradepoints = 0;
         double totalcredit = 0;
-        double gpa;
+        double gpa = 0;
 
-        for(HashMap<String, Integer> item: grademap.getGradeMap()){
-
-            int grade = item.get("Grade");
-            int credit = item.get("Credit");
+        for(GpaActivityFragment frag : modules){
+            int grade = frag.getGrade();
+            int credit = frag.getCredit();
 
             int points = grade*credit;
 
@@ -74,6 +81,7 @@ public class GpaActivity extends AppCompatActivity {
 
         gpa = gradepoints/totalcredit;
         String answer = new DecimalFormat("##.##").format(gpa);
+        if(Double.isNaN(gpa)) answer = "0";
         //find the grade assiated with the points awarded
         ConvertGradePoint pointsToGrade= new ConvertGradePoint((int) Math.round(Double.parseDouble(answer)));
         displayAlert("Your GPA is: " + answer + "\n" + "Grade: " + pointsToGrade.getgradeConverted());
@@ -88,6 +96,7 @@ public class GpaActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             GpaActivityFragment fragGpa = new GpaActivityFragment();
+            String id = (modules.isEmpty()) ? "0":modules.size()+"";
             fragmentTransaction.add(R.id.gpa_fragment_container, fragGpa, modules.size()+"");
             fragmentTransaction.commit();
 
@@ -111,9 +120,8 @@ public class GpaActivity extends AppCompatActivity {
 
     private void storeModules(){
         int i = 0;
-
         // Find all the modules that have data filled for both grade and credit
-        for(GpaActivityFragment frag : modules){
+        for(GpaActivityFragment frag: modules){
             if(frag.check()) {
                 //displayAlert("Missing some data in " + frag.check());
                 //break
@@ -131,13 +139,12 @@ public class GpaActivity extends AppCompatActivity {
 
         //saves each item in grademap to the editor
         GradeMapSingleton grademap = GradeMapSingleton.getInstance();
+        System.out.println("SAVING");
         for(HashMap<String, Integer> item: grademap.getGradeMap()){
 
             editor.putString(item.toString(), item.get("Grade") + "," + item.get("Credit"));
         }
         editor.apply();
-
-        Toast.makeText(this, "Huzzah! Saved", Toast.LENGTH_LONG).show();
     }
 
     public void displayData(View view){

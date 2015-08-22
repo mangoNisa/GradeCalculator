@@ -13,4 +13,5 @@
         android:title="@string/action_calculate_gpa"
         android:icon="@mipmap/check"
         app:showAsAction="never"/>
+
 </menu>

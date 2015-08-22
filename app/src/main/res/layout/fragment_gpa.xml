@@ -6,13 +6,13 @@
     android:paddingBottom="5dp"
     tools:context="com.nisanabi.gpacalculator.GpaActivityFragment"
     >
-
+<!--
     <ImageButton
         android:id="@+id/btn_remove"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@null"
-        android:src="@mipmap/remove" />
+        android:src="@mipmap/remove" />-->
 
     <TextView
         android:layout_width="0px"

@@ -38,7 +38,7 @@ public class GpaActivityFragment extends Fragment {
 
         add_grade = (TextView) view.findViewById(R.id.text_grade);
         add_credit = (TextView) view.findViewById(R.id.text_credit);
-        btn_remove = (ImageButton) view.findViewById(R.id.btn_remove);
+        //btn_remove = (ImageButton) view.findViewById(R.id.btn_remove);
 
         if(!prefGrade.equals("") && !prefCredit.equals("")){
             add_grade.setText(prefGrade);
@@ -92,7 +92,7 @@ public class GpaActivityFragment extends Fragment {
             }
         });
 
-        btn_remove.setOnClickListener(new View.OnClickListener() {
+        /*btn_remove.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 SharedPreferences sharedPref = GpaActivityFragment.this.getActivity().getSharedPreferences("gpaData", Context.MODE_PRIVATE);
                 Map<String, Object> prefMap =(Map) sharedPref.getAll();
@@ -100,18 +100,22 @@ public class GpaActivityFragment extends Fragment {
                 for(String key : prefMap.keySet()){
                     String grade = prefMap.get(key).toString().split(",")[0];
                     String credit = prefMap.get(key).toString().split(",")[1];
+                    System.out.println(credit + " " + getCredit());
+                    System.out.println(credit + " " + getCredit());
 
                     if(grade.equals(getGrade()+"") && credit.equals(getCredit()+"")){
+                        System.out.println(grade + " " + getGrade()+ " delete");
                         sharedPref.edit().remove(key).apply();
                     }
                 }
+                System.out.println(prefMap.size());
                 grademap.remove(getGrade(), getCredit());
 
                 //remove the fragment from disply
                 getActivity().getFragmentManager().beginTransaction().remove(GpaActivityFragment.this).commit();
             }
         });
-
+*/
         return view;
     }
 
